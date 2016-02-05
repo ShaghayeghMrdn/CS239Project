@@ -1,4 +1,4 @@
-
+import sys
 class MyException(Exception):
 	def __init__(self, value):
 		self.value = value
@@ -43,6 +43,7 @@ class Node:
 		return child
 
 
+# sys.setrecursionlimit(100)
 root = Node("main")
 current = root #current top element in the stack
 
