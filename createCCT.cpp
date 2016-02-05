@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 			current = current->add_child(line.substr(12));
 			cout << "push " << current -> get_name() << endl;
 		}
-		else if(line.substr(0, 10) == "[Entry ts]")
+		/*else if(line.substr(0, 10) == "[Entry ts]")
 		{
 			stringstream ss;
 			string tmp;
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 			ss >> tmp >> tmp;
 			ss >> t;
 			current -> set_start(t);
-		}
+		}*/
 		else if(line.substr(0, 10) == "[Call end]")
 		{
 			if (current != root)
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 			}
 			else
 				exit(1);
-		}
+		}/*
 		else if (line.substr(0, 9) == "[Exit ts]")
 		{
 			stringstream ss;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 			ss >> tmp >> tmp;
 			ss >> t;
 			current -> set_end(t);
-		}
+		}*/
 	}
 	input.close();
 
