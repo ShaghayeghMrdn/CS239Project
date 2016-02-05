@@ -17,13 +17,14 @@ class ASM_Example {
             FileOutputStream output_bytecode = new FileOutputStream(args[1]);
 
             ClassReader reader = new ClassReader(input_bytecode);
-            ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+            ClassWriter writer = new MyClassWriter(ClassWriter.COMPUTE_FRAMES);
 
             //********************************************************************************
             // wrap ClassWriter using MyClassVisitor
             // accept MyClassVisitor to visit ClassReader
             ClassVisitor visitor = new MyClassVisitor(writer);
-            reader.accept(visitor, 0);
+            //reader.accept(visitor, 0);
+			reader.accept(visitor, ClassReader.SKIP_FRAMES);
             //********************************************************************************
 
             output_bytecode.write(writer.toByteArray());
@@ -34,6 +35,28 @@ class ASM_Example {
         }
     }
 }
+
+class MyClassWriter extends ClassWriter {
+
+	public MyClassWriter(int i){
+		super(i);
+	}
+
+	public MyClassWriter(ClassReader r, int i){
+		super(r,i);
+	}
+
+	@Override
+	protected String getCommonSuperClass(final String type1, final String type2){
+		try{
+			return super.getCommonSuperClass(type1,type2);
+		} catch (Exception e){
+			System.out.println("ignoring CommonSuperClass() error: " + type1 + ", " + type2);
+			return "java/lang/Object"; 
+		}
+	}
+}
+
 
 //********************************************************************************
 // MyClassVisitor: user-defined ClassVisitor
