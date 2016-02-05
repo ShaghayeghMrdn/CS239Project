@@ -9,11 +9,11 @@ Node* Node::add_child(string child_name)
 {
 	for(int i = 0; i<edges.size(); ++i)
 	{
-		Node* callee = edges[i]->get_callee(); 
+		Node* callee = edges[i]->get_callee();
 		if(callee->get_name() == child_name)
 		{
 			edges[i]->inc_weight();
-			return callee; 
+			return callee;
 		}
 	}
 
@@ -32,7 +32,7 @@ Node::~Node()
 ostream& operator << (ostream& out, const Node* n)
 {
 	out<<n->get_name();
-	if(n->get_name() != "main") out<<"+"<<n->get_parent_weight();
+	if(n->get_name() != "main") out<<"+"<<n->get_parent_weight() << "; avg time: " << (n->get_total_time()/n->get_parent_weight());
 	vector<Edge*> e = n->get_edges();
 	if(e.size() != 0)
 	{
