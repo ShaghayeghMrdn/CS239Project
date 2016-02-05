@@ -1,0 +1,19 @@
+[Call begin] FbClass::<init>
+[Call begin] java/lang/Object::<init>
+[Call end] java/lang/Object::<init>
+[Call end] FbClass::<init>
+[Call begin] FbClass::calc
+[Call begin] FbClass::calc
+[Call begin] FbClass::calc
+[Call end] FbClass::calc
+[Call begin] FbClass::calc
+[Call end] FbClass::calc
+[Call end] FbClass::calc
+[Call begin] FbClass::calc
+[Call end] FbClass::calc
+[Call end] FbClass::calc
+[Call begin] FbClass::print
+[Call begin] java/io/PrintStream::println
+3
+[Call end] java/io/PrintStream::println
+[Call end] FbClass::print
