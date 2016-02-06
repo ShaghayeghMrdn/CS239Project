@@ -28,13 +28,48 @@ void DFS (Node* root, map<int, int>& frequencies)
 	}
 }
 
+void DFS_ts (Node* root, map<int, int>& frequencies)
+{
+	vector<Edge*> edges = root->get_edges();
+	for(int i = 0; i < edges.size(); ++i)
+	{
+		Node* child = edges[i]->get_callee();
+		child->set_path(root->get_path()+to_string(i));
+		int w = child->get_total_time()/child->get_parent_weight();
+		map<int, int>::iterator it = frequencies.find(w);
+		if(it != frequencies.end())
+			frequencies[w] += 1;
+		else
+			frequencies[w] = 1;
+
+		DFS(child, frequencies);
+	}
+}
+
 void dfs_add_child(Node* tmpTree, Node* current){
 	if(tmpTree->get_name() != "tmp"){
-		Node* n = current -> add_child(tmpTree->get_name(), tmpTree->get_parent_weight());
+		Node* n = current -> add_child(tmpTree->get_name(), tmpTree->get_parent_weight(),
+			tmpTree -> get_starts(), tmpTree -> get_ends(), tmpTree-> get_total_time());
 		for(int i = 0; i < tmpTree->get_edges().size(); i++){
 			dfs_add_child(tmpTree->get_edges()[i]->get_callee(), n);
 		}
 	}else{
+		map<long, long> starts = tmpTree->get_starts();
+		map<long, long> ends = tmpTree -> get_ends();
+		long total_time = tmpTree->get_total_time();
+		current->add_time(total_time);
+		for(map<long, long>::iterator it = starts.begin(); it != starts.end(); it++){
+			long tid = it -> first;
+			long stime = it->second;
+			if(stime!=0)
+				current->set_start(stime, tid);
+		}
+		for(map<long, long>::iterator it = ends.begin(); it != ends.end(); it++){
+			long tid = it -> first;
+			long etime = it->second;
+			if(etime!=0)
+				current->set_end(etime, tid);
+		}
 		for(int i = 0; i < tmpTree->get_edges().size(); i++){
 			dfs_add_child(tmpTree->get_edges()[i]->get_callee(), current);
 		}
@@ -82,7 +117,7 @@ int main(int argc, char* argv[]) {
 
 		if(line.substr(0, 12) == "[Call begin]")
 		{
-			//cout << line << endl;
+			cout << line << endl;
 			string method_name = line.substr(12);
 			//cerr<<"begin"<<method_name<<endl;
 			map<string, int>::iterator mit = method_counts.find(method_name);
@@ -120,28 +155,32 @@ int main(int argc, char* argv[]) {
 					threads_num++;
 				}
 			}
+			std::size_t found = method_name.find("Exception::<init>");
+			if( found != std::string::npos && zombie == NULL){
+				zombie = current[tid];
+			}
 		}
 		else if(line.substr(0, 10) == "[Entry ts]")
 		{
-			//cout << line << endl;
-			 /*stringstream ss(line);
+			 cout << line << endl;
+			 stringstream ss(line);
 			 string tmp;
 			 long t;
 			 ss >> tmp >> tmp;
 			 ss >> t;
-			 current[tid] -> set_start(t);*/
+			 //cout << "set thread " << tid << " START to " << t << endl;
+			 current[tid] -> set_start(t, tid);
 		}
 		else if(line.substr(0, 10) == "[Call end]")
 		{
 			// for exception
+			cout << line << endl;
 			string method_name = line.substr(10);
 			std::size_t found = method_name.find("Exception::<init>");
-			if( found != std::string::npos && zombie == NULL){
-				zombie = current[tid] -> get_parent();
+			if( found != std::string::npos && zombie == current[tid]){
 				current[tid] = tmpTree;
 				continue;
 			}
-			//cout << line << endl;
 			map<long, Node*>::iterator it = current.find(tid);
 			if(it != current.end())
 			{
@@ -149,18 +188,49 @@ int main(int argc, char* argv[]) {
 				//cout << "pname: " << pname << endl;
 				//cout << "method_name: "<< method_name << endl;
 				if(pname == method_name){
-					current[tid] = it -> second -> get_parent();
-					level--;
+					//current[tid] = it -> second -> get_parent();
+					//level--;
 					//cout << "level--" << endl;
+					//Don't pop it now, pop in exit ts
 				}else{
 					if(zombie == NULL){
 						//where we exception is not created by junit
-						zombie = current[tid] -> get_parent();
+						zombie = current[tid];
+					}else if (current[tid] != tmpTree){
+						//get root of current[tid] to see if in tmpTree
+						//cout << "to get root" << endl;
+						Node* r = current[tid];
+						while(r -> get_parent()!= NULL){
+							r = r -> get_parent();
+							//cout << "r " << r->get_name()<<endl;
+						}
+						cout <<"root " << r->get_name() << endl;
+						if(r -> get_name() == "tmp"){
+							cout << "current " << current[tid]->get_name()<<endl;
+							r = current[tid] -> get_parent();
+							//cout << "r " << r->get_name()<<endl;
+							while(true){
+								if(r -> get_name() == method_name){
+									current[tid] = r;
+									break;
+								}
+								r = r -> get_parent();
+								if(r == NULL)
+									break;
+							}
+							if(r != NULL)
+								continue;
+						}
 					}
+					//cout << "zombie " << zombie -> get_name() << endl;
+					zombie = zombie -> get_parent();
+					//cout << "zombie " << zombie -> get_name() << endl;
 					while(true){
 						if(zombie->get_name() == method_name){
 							dfs_add_child(tmpTree, zombie);
-							current[tid] = zombie -> get_parent();
+							//Don't pop it now, pop in exit ts
+							//current[tid] = zombie -> get_parent();
+							current[tid] = zombie;
 							tmpTree = new Node("tmp");
 							zombie = NULL;
 							break;
@@ -178,13 +248,20 @@ int main(int argc, char* argv[]) {
 		}
 		else if (line.substr(0, 9) == "[Exit ts]")
 		{
-			//cout << line << endl;
-			/*stringstream ss(line);
+			cout << line << endl;
+			stringstream ss(line);
 			string tmp;
 			long t;
 			ss >> tmp >> tmp;
 			ss >> t;
-			current[tid] -> set_end(t);*/
+			if(current[tid] -> get_name() == "tmp"){
+				assert(zombie != NULL);
+				zombie -> set_end(t, tid);
+			}else{
+				current[tid] -> set_end(t, tid);
+				current[tid] = current[tid]->get_parent();
+
+			}
 		}
 	}
 	input.close();
@@ -214,5 +291,16 @@ int main(int argc, char* argv[]) {
 	// cout<<"--call stack (node) frequencies: "<<endl;
 	cout<<"weight,frequency"<<endl;
 	for(map<int, int>::iterator it = freqs.begin(); it != freqs.end(); ++it)
+		cout<<it->first<<","<<it->second<<endl;
+
+
+	cout << "*******************" << endl;
+	map<int, int> times;
+	root->set_path("0");
+	DFS_ts(root, times);
+
+	// cout<<"--call stack (node) frequencies: "<<endl;
+	cout<<"average time,frequency"<<endl;
+	for(map<int, int>::iterator it = times.begin(); it != times.end(); ++it)
 		cout<<it->first<<","<<it->second<<endl;
 }
