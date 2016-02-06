@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
 
 		if(line.substr(0, 12) == "[Call begin]")
 		{
-			cout << line << endl;
+			//cout << line << endl;
 			string method_name = line.substr(12);
 			//cerr<<"begin"<<method_name<<endl;
 			map<string, int>::iterator mit = method_counts.find(method_name);
@@ -162,7 +162,7 @@ int main(int argc, char* argv[]) {
 		}
 		else if(line.substr(0, 10) == "[Entry ts]")
 		{
-			 cout << line << endl;
+			 //cout << line << endl;
 			 stringstream ss(line);
 			 string tmp;
 			 long t;
@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
 		else if(line.substr(0, 10) == "[Call end]")
 		{
 			// for exception
-			cout << line << endl;
+			//cout << line << endl;
 			string method_name = line.substr(10);
 			std::size_t found = method_name.find("Exception::<init>");
 			if( found != std::string::npos && zombie == current[tid]){
@@ -204,9 +204,9 @@ int main(int argc, char* argv[]) {
 							r = r -> get_parent();
 							//cout << "r " << r->get_name()<<endl;
 						}
-						cout <<"root " << r->get_name() << endl;
+						//cout <<"root " << r->get_name() << endl;
 						if(r -> get_name() == "tmp"){
-							cout << "current " << current[tid]->get_name()<<endl;
+							//cout << "current " << current[tid]->get_name()<<endl;
 							r = current[tid] -> get_parent();
 							//cout << "r " << r->get_name()<<endl;
 							while(true){
@@ -248,7 +248,7 @@ int main(int argc, char* argv[]) {
 		}
 		else if (line.substr(0, 9) == "[Exit ts]")
 		{
-			cout << line << endl;
+			//cout << line << endl;
 			stringstream ss(line);
 			string tmp;
 			long t;
@@ -271,8 +271,8 @@ int main(int argc, char* argv[]) {
 	}
 	//cout<<root<<endl;
 
-	cout << starts_num << " " << threads_num << endl;
-	cout << level << endl;
+	//cout << starts_num << " " << threads_num << endl;
+	//cout << level << endl;
 
 	// assert(starts_num == threads_num);
 	// cout<<"numbr of methods: "<<method_counts.size()<<endl;
