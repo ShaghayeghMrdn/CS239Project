@@ -6,6 +6,8 @@
 #include "Edge.h"
 using namespace std;
 
+extern int node_count;
+
 class Node
 {
 public:
@@ -19,6 +21,8 @@ public:
 	Node* get_parent() {return this->parent_edge->get_caller();}
 	vector<Edge*> get_edges() const {return edges;}
 	int get_parent_weight() const {return parent_edge->get_weight();}
+	void set_path(string s) {path = s;}
+	string get_path() {return path;}
 	void set_start(long t){
 		cout << "start: " << name << endl;
 		assert(ts_start == 0);
@@ -43,6 +47,8 @@ private:
 	long ts_start;
 	long ts_end;
 	long total_time;
+
+	string path; //int representation for path to a node
 };
 
 ostream& operator << (ostream& out, const Node* n);
