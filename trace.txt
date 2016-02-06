@@ -9,7 +9,9 @@
 [Tid: 1][Call begin] java/lang/Thread::start
 [Entry ts]: 310579646975978
 [Exit ts]: 310579647439351
-[Tid: 1][Call end] java/lang/Thread::start
+[Tid: 1][Call end] java/lang/Object
+[Tid: 1][Call begin] java/lang/Object
+[Entry ts]: 310579646975978
 [Tid: 2][Call begin] FbClass::calc
 [Entry ts]: 310579647049904
 [Tid: 2][Call begin] FbClass::calc
@@ -22,3 +24,5 @@
 [Tid: 1][Call end] FbClass::calc
 [Exit ts]: 310579647160061
 [Tid: 2][Call end] FbClass::calc
+[Exit ts]: 310579647439351
+[Tid: 1][Call end] java/lang/Object

@@ -7,6 +7,7 @@ Node::Node(string n): name(n)
 		ts_start = 0;
 		ts_end = 0;
 		total_time = 0;
+		path = "";
 }
 
 void Node::set_parent(Edge* p_e)
@@ -27,6 +28,7 @@ Node* Node::add_child(string child_name)
 	}
 
 	Node* child = new Node(child_name);
+	node_count++;
 	Edge* new_edge = new Edge(this, child);
 	child->set_parent(new_edge);
 	edges.push_back(new_edge);
@@ -35,7 +37,6 @@ Node* Node::add_child(string child_name)
 
 Node::~Node()
 {
-
 }
 
 ostream& operator << (ostream& out, const Node* n)
