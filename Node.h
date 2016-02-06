@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <assert.h>
 #include "Edge.h"
 using namespace std;
@@ -9,15 +10,8 @@ class Node
 {
 public:
 
-	Node(string n): name(n) {
-		parent_edge = NULL;
-		edges = vector<Edge*>();
-		ts_start = 0;
-		ts_end = 0;
-		total_time = 0;
-	}
+	Node(string n);
 	~Node();
-
 	void set_parent(Edge* p_e);
 	Node* add_child(string child_name);
 	string get_name() const {return name;}
@@ -26,9 +20,10 @@ public:
 	int get_parent_weight() const {return parent_edge->get_weight();}
 	void set_start(long t){
 		cout << "start: " << name << endl;
-		assert(ts_start == 0 );
+		assert(ts_start == 0);
 		ts_start = t;
 	}
+
 	void set_end(long t){
 		cout << "end: " << name << endl;
 		assert(ts_end == 0);

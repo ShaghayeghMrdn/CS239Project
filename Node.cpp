@@ -1,5 +1,14 @@
 #include "Node.h"
 
+Node::Node(string n): name(n) 
+{
+		parent_edge = NULL;
+		edges = vector<Edge*>();
+		ts_start = 0;
+		ts_end = 0;
+		total_time = 0;
+}
+
 void Node::set_parent(Edge* p_e)
 {
 	this->parent_edge = p_e;

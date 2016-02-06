@@ -1,37 +1,24 @@
-[Call begin] FbClass::<init>
+[Tid: 1][Call begin] FbClass::<init>
 [Entry ts]: 310579646749761
-[Call begin] java/lang/Object::<init>
+[Tid: 1][Call begin] java/lang/Object::<init>
 [Entry ts]: 310579646827001
 [Exit ts]: 310579646859341
-[Call end] java/lang/Object::<init>
+[Tid: 1][Call end] java/lang/Object::<init>
 [Exit ts]: 310579646912100
-[Call end] FbClass::<init>
-[Call begin] FbClass::calc
+[Tid: 1][Call end] FbClass::<init>
+[Tid: 1][Call begin] java/lang/Thread::start
 [Entry ts]: 310579646975978
-[Call begin] FbClass::calc
-[Entry ts]: 310579647049904
-[Call begin] FbClass::calc
-[Entry ts]: 310579647118889
-[Exit ts]: 310579647160061
-[Call end] FbClass::calc
-[Call begin] FbClass::calc
-[Entry ts]: 310579647233537
-[Exit ts]: 310579647269767
-[Call end] FbClass::calc
-[Exit ts]: 310579647338265
-[Call end] FbClass::calc
-[Call begin] FbClass::calc
-[Entry ts]: 310579647416807
 [Exit ts]: 310579647439351
-[Call end] FbClass::calc
-[Exit ts]: 310579647478088
-[Call end] FbClass::calc
-[Call begin] FbClass::print
-[Entry ts]: 310579647539920
-[Call begin] java/io/PrintStream::println
-[Entry ts]: 310579647627031
-3
-[Exit ts]: 310579647731696
-[Call end] java/io/PrintStream::println
-[Exit ts]: 310579647798622
-[Call end] FbClass::print
+[Tid: 1][Call end] java/lang/Thread::start
+[Tid: 2][Call begin] FbClass::calc
+[Entry ts]: 310579647049904
+[Tid: 2][Call begin] FbClass::calc
+[Tid: 2][Entry ts]: 310579647233537
+[Tid: 2][Exit ts]: 310579647269767
+[Tid: 2][Call end] FbClass::calc
+[Tid: 1][Call begin] FbClass::calc
+[Tid: 1][Entry ts]: 310579647416807
+[Tid: 1][Exit ts]: 310579647439351
+[Tid: 1][Call end] FbClass::calc
+[Exit ts]: 310579647160061
+[Tid: 2][Call end] FbClass::calc
