@@ -14,6 +14,7 @@ public:
 	~Node();
 	void set_parent(Edge* p_e);
 	Node* add_child(string child_name);
+	Node* add_child(string child_name, int weight);
 	string get_name() const {return name;}
 	Node* get_parent() {return this->parent_edge->get_caller();}
 	vector<Edge*> get_edges() const {return edges;}

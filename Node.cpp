@@ -1,6 +1,6 @@
 #include "Node.h"
 
-Node::Node(string n): name(n) 
+Node::Node(string n): name(n)
 {
 		parent_edge = NULL;
 		edges = vector<Edge*>();
@@ -28,6 +28,25 @@ Node* Node::add_child(string child_name)
 
 	Node* child = new Node(child_name);
 	Edge* new_edge = new Edge(this, child);
+	child->set_parent(new_edge);
+	edges.push_back(new_edge);
+	return child;
+}
+
+Node* Node::add_child(string child_name, int weight)
+{
+	for(int i = 0; i<edges.size(); ++i)
+	{
+		Node* callee = edges[i]->get_callee();
+		if(callee->get_name() == child_name)
+		{
+			edges[i]->inc_weight(weight);
+			return callee;
+		}
+	}
+
+	Node* child = new Node(child_name);
+	Edge* new_edge = new Edge(this, child, weight);
 	child->set_parent(new_edge);
 	edges.push_back(new_edge);
 	return child;
