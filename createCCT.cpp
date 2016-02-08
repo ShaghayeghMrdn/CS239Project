@@ -9,8 +9,8 @@ using namespace std;
 
 int node_count = 0;
 
-void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& heavies, 
-			vector<pair<string, int> >& longests, vector<int>& all_times)
+void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& heavies,
+			vector<pair<string, int> >& longests, vector<long>& all_times)
 {
 	vector<Edge*> edges = root->get_edges();
 	for(int i = 0; i < edges.size(); ++i)
@@ -24,8 +24,8 @@ void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& he
 			frequencies[w] += 1;
 		else
 			frequencies[w] = 1;
- 
-		int exec_t = child->get_total_time()/child->get_parent_weight();
+
+		long exec_t = child->get_total_time()/child->get_parent_weight();
 		for(int i = 0; i<10; ++i)
 		{
 			if(w > heavies[i].second)
@@ -46,6 +46,7 @@ void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& he
 			}
 		}
 
+		assert(exec_t >= 0);
 		all_times.push_back(exec_t);
 
 		DFS(child, frequencies, heavies, longests, all_times);
@@ -88,12 +89,18 @@ void dfs_add_child(Node* tmpTree, Node* current)
 			long stime = it->second;
 			if(stime!=0)
 				current->set_start(stime, tid);
+			else{
+				//assert(current->get_start(tid) != 0);
+			}
 		}
 		for(map<long, long>::iterator it = ends.begin(); it != ends.end(); it++){
 			long tid = it->first;
 			long etime = it->second;
 			if(etime!=0)
 				current->set_end(etime, tid);
+			else{
+				//assert(current->get_end(tid) != 0);
+			}
 		}
 		for(int i = 0; i < tmpTree->get_edges().size(); i++){
 			dfs_add_child(tmpTree->get_edges()[i]->get_callee(), current);
@@ -107,7 +114,7 @@ void generate_data(Node* root)
 	map<int, int> freqs;
 	vector<pair<string, int> > heavies;
 	vector<pair<string, int> > longests;
-	vector<int> all_times;
+	vector<long> all_times;
 
 	for(int i = 0; i<10; ++i)
 	{
@@ -126,19 +133,19 @@ void generate_data(Node* root)
 
 	out.open("n-w.csv");
 	out<<"call_stack,weight"<<endl;
-	for(int i = 0; i<heavies.size(); ++i) 
+	for(int i = 0; i<heavies.size(); ++i)
 		out<<heavies[i].first<<","<<heavies[i].second<<endl;
 	out.close();
 
 	out.open("n-t.csv");
 	out<<"call_stack,execution_time"<<endl;
-	for(int i = 0; i<longests.size(); ++i) 
+	for(int i = 0; i<longests.size(); ++i)
 		out<<longests[i].first<<","<<longests[i].second<<endl;
 	out.close();
 
 	out.open("times.csv");
 	out<<"execution_time"<<endl;
-	for(int i = 0; i<all_times.size(); ++i) 
+	for(int i = 0; i<all_times.size(); ++i)
 		out<<all_times[i]<<endl;
 	out.close();
 }
@@ -243,7 +250,7 @@ int main(int argc, char* argv[])
 			if(it != current.end())
 			{
 				string pname = it->second->get_name();
-				if(pname != method_name) //When it's not the same as we expect it to be 
+				if(pname != method_name) //When it's not the same as we expect it to be
 				{
 					if(zombie == NULL){
 						//where the exception is not created by junit
@@ -324,7 +331,7 @@ int main(int argc, char* argv[])
 	// for(map<string, int>::iterator it = method_counts.begin(); it != method_counts.end(); ++it)
 	// {
 	// 	size_t found = it->first.find_last_of("/");
-	// 	string simple_name = it->first; 
+	// 	string simple_name = it->first;
 	// 	if(found != string::npos)
 	// 		simple_name = simple_name.substr(found+1);
 	// 	cout<<simple_name<<","<<it->second<<endl;

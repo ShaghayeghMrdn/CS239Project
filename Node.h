@@ -49,7 +49,10 @@ public:
 		starts[tid] = 0;
 		ends[tid] = 0;
 	}
-	long get_total_time() const{return total_time;}
+	long get_total_time() const{
+		assert(total_time >= 0);
+		return total_time;
+	}
 
 	void add_time(long ttime){total_time += ttime;}
 
