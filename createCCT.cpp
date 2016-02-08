@@ -10,7 +10,7 @@ using namespace std;
 int node_count = 0;
 
 void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& heavies,
-			vector<pair<string, int> >& longests, vector<long>& all_times)
+			vector<pair<string, long> >& longests, vector<long>& all_times)
 {
 	vector<Edge*> edges = root->get_edges();
 	for(int i = 0; i < edges.size(); ++i)
@@ -113,7 +113,7 @@ void generate_data(Node* root)
 	ofstream out;
 	map<int, int> freqs;
 	vector<pair<string, int> > heavies;
-	vector<pair<string, int> > longests;
+	vector<pair<string, long> > longests;
 	vector<long> all_times;
 
 	for(int i = 0; i<10; ++i)
