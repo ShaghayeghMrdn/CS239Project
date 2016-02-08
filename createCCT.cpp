@@ -26,7 +26,8 @@ void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& he
 		else
 			frequencies[w] = 1;
 
-		long exec_t = child->get_total_time()/child->get_parent_weight();
+		//long exec_t = child->get_total_time()/child->get_parent_weight();
+		long exec_t = child -> get_total_time();
 		for(int i = 0; i<10; ++i)
 		{
 			if(w > heavies[i].second)
