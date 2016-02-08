@@ -16,7 +16,7 @@ void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& he
 	for(int i = 0; i < edges.size(); ++i)
 	{
 		Node* child = edges[i]->get_callee();
-		string path = root->get_path()+edges[i]->get_callee()->get_name();
+		string path = root->get_path()+to_string(i); //edges[i]->get_callee()->get_name()
 		child->set_path(path);
 		int w = child->get_parent_weight();
 		map<int, int>::iterator it = frequencies.find(w);
@@ -32,12 +32,17 @@ void DFS (Node* root, map<int, int>& frequencies, vector<pair<string, int> >& he
 			{
 				heavies.insert(heavies.begin()+i, pair<string, int>(path, w));
 				heavies.erase(heavies.begin()+10);
+				break;
 			}
+		}
 
+		for(int i = 0; i<10; ++i)
+		{
 			if(exec_t > longests[i].second)
 			{
 				longests.insert(longests.begin()+i, pair<string, int>(path, exec_t));
 				longests.erase(longests.begin()+10);
+				break;
 			}
 		}
 
@@ -111,7 +116,7 @@ void generate_data(Node* root)
 	}
 
 	out.open("nw-f.csv");
-	root->set_path("Main");
+	root->set_path("0");
 	DFS(root, freqs, heavies, longests, all_times);
 	// --call stack (node) frequencies:
 	out<<"weight,frequency"<<endl;
@@ -314,7 +319,7 @@ int main(int argc, char* argv[])
 	}
 
 	generate_data(root);
-	
+
 	// cout<<"--method frequencies: "<<endl;
 	// for(map<string, int>::iterator it = method_counts.begin(); it != method_counts.end(); ++it)
 	// {
